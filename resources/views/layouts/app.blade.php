@@ -2,86 +2,191 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
-    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css"/>
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    @include('layouts.header')
 </head>
-<body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
 
-                    </ul>
+    <header class="main-header">
+        <!-- Logo -->
+        <a href="index2.html" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>Y</b>C</span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>Global Wheels</b>CRM</span>
+        </a>
+        <!-- Errors Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <!-- User Account: style can be found in dropdown.less -->
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="{{url('')}}/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+@php if(isset(Auth::user()->name)){ @endphp
+                            <span class="hidden-xs">{{ ucfirst( Auth::user()->name) }}</span>
+                            @php } @endphp
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- User image -->
+                            <li class="user-header">
+                                <img src="{{url('')}}/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                <p>
+                                    @php if(isset(Auth::user()->name)){ @endphp
+                                    {{auth::user()->name}}
+                                    <small>Member since <b> {{ date('d-M-Y',strtotime(auth::user()->created_at))}}</b>
+                                    </small>
+                                    @php } @endphp
+                                </p>
                             </li>
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
+                            <!-- Menu Body -->
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a href="/logout" class="btn btn-default btn-flat">Sign out</a>
                                 </div>
                             </li>
-                        @endguest
-                    </ul>
-                </div>
+                        </ul>
+                    </li>
+                    <!-- Control Sidebar Toggle Button -->
+                </ul>
             </div>
         </nav>
+    </header>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar user panel -->
+            <div class="user-panel">
+                <div class="pull-left image">
+                    <img src="{{url('')}}/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                </div>
+                <div class="pull-left info">
+                    @php if(isset(Auth::user()->name)){ @endphp
+                    <p>  {{ ucfirst(auth::user()->name)}}</p>
+                    @php } @endphp
+                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                </div>
+            </div>
 
-        <main class="py-4">
-            @yield('content')
-        </main>
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu" data-widget="tree">
+                <li class="header">MAIN NAVIGATION</li>
+                <li class="active treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>User</span>
+                        <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="active"><a href="{{route('default')}}"><i class="fa fa-circle-o"></i>User
+                                Creation</a></li>
+
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>State</span>
+                        <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="active"><a href="{{route('country')}}"><i class="fa fa-circle-o"></i>Country</a></li>
+                        <li class="active"><a href="{{route('state')}}"><i class="fa fa-circle-o"></i>State</a></li>
+                        <li class="active"><a href="{{route('city')}}"><i class="fa fa-circle-o"></i>City</a></li>
+
+                    </ul>
+                </li>
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                @if(isset($bread))
+                    {{$bread}}
+                @endif
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#">
+                        <i class="fa fa-dashboard"></i>
+                        @if(isset($module))
+                            {{$module}}
+                            @endif</a></li>
+                <li class="active">  @if(isset($bread))
+                        {{$bread}}
+                    @endif</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- Small boxes (Stat box) -->
+            <!-- Input addon -->
+            <div class="box box-info">
+                <!-- /.box-header -->
+                <div class="box-body">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    @if ($message = Session::get('success'))
+                        <div class="alert alert-success alert-block">
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            <strong>{{ $message }}</strong>
+                        </div>
+                    @endif
+
+
+                    @if ($message = Session::get('error'))
+                        <div class="alert alert-danger alert-block">
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            <strong>{{ $message }}</strong>
+                        </div>
+                    @endif
+                    @yield('content')
+
+                </div>
+                <!-- /.box-body -->
+
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+            <!-- /.row -->
+            <!-- Main row -->
+
+            <!-- /.row (main row) -->
+
+        </section>
     </div>
+
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+            <!--<b>Version</b> 2.4.18-->
+        </div>
+        <strong>Copyright &copy; 2019-2020 <a href="">YouChug.com</a>.</strong> All rights
+        reserved.
+    </footer>
+</div>
 </body>
+@include('layouts.footer')
 </html>

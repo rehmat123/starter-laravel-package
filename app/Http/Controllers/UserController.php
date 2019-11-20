@@ -26,15 +26,11 @@ class UserController extends Controller
      */
     public function index(Request $request, $id = null)
     {
-       // $action = $id != null ? 'user.update' : 'store';
-
+        $action = $id != null ? 'user.update' : 'store';
         $assignRole = '';
         $roles = [];
-
         try {
-            $data = User::all();
-
-
+            $data = User::where('id', '=', $id)->get()->first();
             $rol = Role::all(['id', 'display_name'])->toArray();
             if ($id != null) {
                 $assignRole = RoleUser::where('user_id', '=', $id)->first()->toArray()['role_id'];
@@ -58,7 +54,7 @@ class UserController extends Controller
             'id' => $id,
             'roles' => $roles,
             'default' => $assignRole,
-            //'action' => $action
+            'action' => $action
         ]);
     }
 
