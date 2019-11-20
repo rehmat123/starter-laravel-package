@@ -1,6 +1,6 @@
 <?php
 
-namespace Common;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,15 +14,15 @@ class UserDetail extends Model
 
     public function country()
     {
-        return $this->hasOne('Common\Country','id','country_id');
+        return $this->hasOne('App\Country','id','country_id');
     }
     public function city()
     {
-        return $this->hasOne('Common\City','id','city_id');
+        return $this->hasOne('App\City','id','city_id');
     }
     public function state()
     {
-        return $this->hasOne('Common\State','id','state_id');
+        return $this->hasOne('App\State','id','state_id');
     }
 
 }

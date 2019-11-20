@@ -1,6 +1,6 @@
 <?php
 
-namespace Common;
+namespace App\Models;
 
 
 use Common\helper\helper;
@@ -21,7 +21,7 @@ class State extends Model
     }
 
     function city(){
-        return $this->hasMany('Common\City');
+        return $this->hasMany('App\City');
     }
 
 

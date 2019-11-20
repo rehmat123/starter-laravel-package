@@ -14,8 +14,8 @@
 <div>
     <div class="row">
         <div class="col-md-12">
-            <form method="POST" action={{route('user.store')}} accept-charset="UTF-8">
-                {!! Form::token() !!}
+
+            {{Form::model($data,['route'=>$action,'id',$id])}}
             <div class="col-md-6">
                 <div class="form-group">
                     {{Form::label('Name')}}

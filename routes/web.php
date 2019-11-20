@@ -30,19 +30,20 @@ Route::prefix('/user')->group(function () {
     Route::get('/', ['uses' => 'UserController@show', 'as' => 'users.show']);
 });*/
 
-Route::get('user/{id}', 'UserController@index')->name('user');
-Route::get('user/index', 'UserController@index')->middleware('auth');
-Route::get('user/create', 'UserController@create')->name('user.create');
-Route::post('user/store', 'UserController@store')->name('store');
-Route::get('user/status/{id}', 'UserController@status')->name('user.status');
-Route::get('user/delete/{id}', 'UserController@destroy')->name('user.delete');
-Route::post('user/update/', 'UserController@update')->name('user.update');
-Route::prefix('/user')->group(function () {
-    Route::get('/', ['uses' => 'UserController@show', 'as' => 'users.show']);
-});
-Route::get('/user/index', 'UserController@index')->name('default');
+Route::prefix('user')->group(function () {
 
-//Route::get('/', 'UserController@index')->name('default');
+    Route::get('/', 'UserController@index')->name('default');
+    Route::get('create', 'UserController@create')->name('user.create');
+    Route::post('/store', 'UserController@store')->name('user.store');
+    Route::get('edit/{id}', 'UserController@edit')->name('user.edit');
+    Route::post('update', 'UserController@update')->name('user.update');
+    Route::get('status/{id}', 'UserController@status')->name('user.status');
+    Route::get('delete/{id}', 'UserController@destroy')->name('user.delete');
+    Route::get('/user/ajax', ['uses' => 'UserController@show', 'as' => 'users.show']);
+
+});
+
+
 
 Route::prefix('country')->group(function () {
     Route::get('/', 'Country\CountryController@index')->name('country');
@@ -78,3 +79,6 @@ Route::prefix('city')->middleware('auth')->group(function () {
     Route::post('update', 'City\CityController@update')->name('city.update');
     Route::get('delete/{id}', 'City\CityController@destroy')->name('city.delete');
 });
+
+
+    Route::get('logout', 'Auth\LoginController@logout');

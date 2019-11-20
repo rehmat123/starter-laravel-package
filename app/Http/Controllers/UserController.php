@@ -3,8 +3,9 @@
 namespace app\Http\Controllers;
 
 use Auth;
-use App\Role;
-use App\RoleUser;
+use App\Models\Role;
+use App\Models\RoleUser;
+use App\Models\UserDetail;
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -24,18 +25,16 @@ class UserController extends Controller
      * Display a listing of the resource.
      * @return Response
      */
-    public function index(Request $request, $id = null)
+    public function index(Request $request)
     {
-        $action = $id != null ? 'user.update' : 'store';
-        $assignRole = '';
+        return view('user.index');
+    }
+
+    public function create(Request $request){
+
         $roles = [];
         try {
-            $data = User::where('id', '=', $id)->get()->first();
             $rol = Role::all(['id', 'display_name'])->toArray();
-            if ($id != null) {
-                $assignRole = RoleUser::where('user_id', '=', $id)->first()->toArray()['role_id'];
-            }
-
             foreach ($rol as $key => $val) {
                 $roles[$val['id']] = $val['display_name'];
             }
@@ -50,44 +49,9 @@ class UserController extends Controller
         return view('user.create')->with([
             'title' => 'Home',
             'bread' => 'User Creation',
-            'data' => $data,
-            'id' => $id,
             'roles' => $roles,
-            'default' => $assignRole,
-            'action' => $action
-        ]);
-    }
+            'default' => $rol,
 
-    public function create(Request $request, $id = null){
-        $action = $id != null ? 'user.update' : 'store';
-        $assignRole = '';
-        $roles = [];
-        try {
-            $data = User::where('id', '=', $id)->get()->first();
-            $rol = Role::all(['id', 'display_name'])->toArray();
-            if ($id != null) {
-                $assignRole = RoleUser::where('user_id', '=', $id)->first()->toArray()['role_id'];
-            }
-
-            foreach ($rol as $key => $val) {
-                $roles[$val['id']] = $val['display_name'];
-            }
-        } catch (\Exception $ex) {
-            Session::flash("error", $ex->getMessage() . ' Line No ' . $ex->getLine());
-            redirect('user');
-        } catch (\Throwable $ex) {
-            Session::flash("error", $ex->getMessage() . ' Line No ' . $ex->getLine());
-            redirect('user');
-        }
-
-        return view('user.index')->with([
-            'title' => 'Home',
-            'bread' => 'User Creation',
-            'data' => $data,
-            'id' => $id,
-            'roles' => $roles,
-            'default' => $assignRole,
-            'action' => $action
         ]);
     }
 
@@ -98,6 +62,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'name' => 'required|string|min:3',
             'email' => 'email|required|unique:users',
@@ -136,7 +101,7 @@ class UserController extends Controller
             Session::flash('error', $ex->getMessage() . 'Line No ' . $ex->getLine());
         }
 
-        return redirect('/');
+        return redirect('/user');
     }
 
     /**
@@ -144,6 +109,43 @@ class UserController extends Controller
      * @param int $id
      * @return Response
      */
+
+    public function edit($id){
+
+        $action = $id != null ? 'user.update' : 'store';
+        $assignRole = '';
+        $roles = [];
+        try {
+            $data = User::where('id', '=', $id)->get()->first();
+            $rol = Role::all(['id', 'display_name'])->toArray();
+
+
+              if ($id != null) {
+                  $assignRole = RoleUser::where('user_id', '=', $id)->first()->toArray()['role_id'];
+
+              }
+
+            foreach ($rol as $key => $val) {
+                $roles[$val['id']] = $val['display_name'];
+            }
+        } catch (\Exception $ex) {
+            Session::flash("error", $ex->getMessage() . ' Line No ' . $ex->getLine());
+            redirect('user');
+        } catch (\Throwable $ex) {
+            Session::flash("error", $ex->getMessage() . ' Line No ' . $ex->getLine());
+            redirect('user');
+        }
+
+        return view('user.edit')->with([
+            'title' => 'Home',
+            'bread' => 'User Update',
+            'data' => $data,
+            'id' => $id,
+            'roles' => $roles,
+            'default' => $assignRole,
+            'action' => $action
+        ]);
+    }
     public function show()
     {
 
@@ -167,7 +169,7 @@ class UserController extends Controller
 
                 $btn = '<a title="Change Status" href="' . route('user.status', $row->id) . '" class="edit btn btn-primary btn-sm">
               <span class="glyphicon glyphicon-refresh"></span></a>';
-                $btn .= '  <a title="Edit" href="' . route('user', $row->user_id) . '" class="edit btn btn-primary btn-sm">
+                $btn .= '  <a title="Edit" href="' . route('user.edit', $row->user_id) . '" class="edit btn btn-primary btn-sm">
               <span class="glyphicon glyphicon-edit"></span></a>';
                 $btn .= '  <a title="Delete" style="background: indianred;" href="' . route('user.delete', $row->user_id) . '" class="edit btn btn-primary btn-sm">
               <span style="color:#fff;" class="glyphicon glyphicon-trash"></span></a>';
@@ -247,7 +249,7 @@ class UserController extends Controller
     {
         try {
             $data = UserDetail::find(['user_id' => $id])->first();
-            $data->active = $data->active == 1 ? 0 : 1;
+            $data->active = ($data->active == 1) ? 0 : 1;
             if ($data->save()) {
                 Session::flash('success', 'Status Changes Successfully');
             }
@@ -255,6 +257,8 @@ class UserController extends Controller
         } catch (\Exception $ex) {
             Session::flash('error', $ex->getMessage() . 'Line No' . $ex->getLine());
         }
-        return redirect('/');
+        return redirect('/user');
     }
+
+
 }

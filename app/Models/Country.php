@@ -1,6 +1,6 @@
 <?php
 
-namespace Common;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,11 +15,11 @@ class Country extends Model
 
     public function state()
     {
-        return $this->hasMany('Common\State');
+        return $this->hasMany('App\State');
     }
 
     public function city()
     {
-        return $this->hasMany('Common\City');
+        return $this->hasMany('App\City');
     }
 }

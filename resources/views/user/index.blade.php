@@ -1,83 +1,44 @@
+
 @extends('layouts.app')
+
 @section('content')
-        <!doctype html>
-<html lang="{{ app()->getLocale() }}">
-<head>
-    <title>{{$title}}</title>
-
-</head>
-<body>
-
-<!-- Content Errors (Page header) -->
 
 
-<div>
     <div class="row">
         <div class="col-md-12">
-
-                {{Form::model($data,['route'=>$action,'id',$id])}}
-                <div class="col-md-6">
-                    <div class="form-group">
-                        {{Form::label('Name')}}
-                        {{Form::text('name',null,['class'=>'form-control'])}}
-                        {{Form::hidden('id')}}
-                    </div>
-                    <!-- /.form-group -->
-                    <div class="form-group">
-                        {{Form::label('Password')}}
-                        {{Form::text('password','',['class'=>'form-control'])}}
-                    </div>
-                    <!-- /.form-group -->
-                </div>
-                <!-- /.col -->
-                <div class="col-md-6">
-                    <div class="form-group">
-                        {{Form::label('Email')}}
-                        {{Form::text('email',null,['class'=>'form-control'])}}
-                    </div>
-
-                    <!-- /.form-group -->
-                    <div class="form-group">
-                        {{Form::label('Confirm Password')}}
-                        {{Form::text('password_confirmation','',['class'=>'form-control'])}}
-                    </div>
-                    <!-- /.form-group -->
-                </div>
-                <!-- /.col -->
-                <!-- /.col -->
-                <div class="col-md-6">
-                    <div class="form-group">
-                        {{Form::label('Role')}}
-                        {{Form::select('roleId',$roles,$default,['class'=>'form-control',"placeholder"=>'Please Select Role'])}}
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-small btn-primary">Submit</button>
-                    </div>
-                </div>
-                <!-- /.col -->
-                {{Form::close()}}
-
+            <a href="{{route('user.create')}}" class="btn btn-primary add-new-btn">Add User</a>
         </div>
-
     </div>
-</div>
+    <div class="col-md-12">
 
-<!-- /.row -->
-<!-- /.content -->
-
-
-
-
-</body>
-<script type="text/javascript">
-
-    $("#add-new-form").hide();
-    $(".add-new-btn").click(function(){
-       $("#add-new-form").slideDown();
-        $(".add-new-btn").hide();
-    });
-
-</script>
-</html>
-
+        <table class="table table-bordered data-table">
+            <thead>
+            <tr>
+                <th>No</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th width="100px">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            var table = $('.data-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('users.show') }}",
+                columns: [
+                    {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                    {data: 'name', name: 'name'},
+                    {data: 'email', name: 'email'},
+                    {data: 'status', name: 'status'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                ]
+            });
+        });
+    </script>
 @stop

@@ -5,7 +5,7 @@
  * Date: 20/11/2019
  * Time: 10:37 AM
  */
- namespace App;
+namespace App\Models;
 
 use Zizaco\Entrust\EntrustPermission;
 
